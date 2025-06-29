@@ -5,7 +5,6 @@ import '../App.css'
 
 export default function Cart() {
 const cartItems = useSelector((state) => state.cartItem); // ✅ correct
-console.log(cartItems);
 
   return (
     <div className="cart-container">

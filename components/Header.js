@@ -6,7 +6,6 @@ import { useSelector } from '../react-redux';
 export default function Header() {
   const cartItems = useSelector((state) => state.cartItem); // ✅ use correct key
 
-  console.log('Cart items in header:', cartItems);
 
   return (
     <header>

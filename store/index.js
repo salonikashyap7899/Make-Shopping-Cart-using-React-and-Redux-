@@ -1,35 +1,15 @@
 import { createStore, combineReducers } from 'redux';
-import { productsList } from '../store/productsList'; // ✅ Works with your current export
-;
+
 import cartReducer, {
-  AddCartItem,
-  decreaseCartItemQuantity,
-  increaseCartItemQuantity,
-  removeItem
-} from './cartReducer';
+
+} from './cartSlice';
 import wishListReducer, {
-  addWishListItem,
-  removeWishList,
-} from './wishListReducer';
-import productsReducer from './productReducer';
 
-// function combineReducers(reducers) {
-//   const reducerKeys = Object.keys(reducers)
+} from './wishListSlice';
+import productsReducer from './productSlice';
 
-//   return function (state = {}, action) {
-//     const nextState = {}
-    
-//     for (let i = 0; i < reducerKeys.length; i++) {
-//       const key = reducerKeys[i]
-//       const reducer = reducers[key]
-//       const previousStateForKey = state[key]
-//       const nextStateForKey = reducer(previousStateForKey, action)
-//       nextState[key] = nextStateForKey
-//     }
+import {produce} from 'immer'
 
-//     return nextState
-//   }
-// }
 
 
 
@@ -45,17 +25,39 @@ export const store = createStore(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__?.()
 )
-// console.log(store);
+// console.log(store.getState());
+
+
+const users = [
+  {
+    name: 'saloni',
+    age: 19
+  },
+  {
+    name: 'ram',
+    age: 20
+  },
+  {
+    name: 'aayu',
+    age: 26
+  },
+]
 
 
 
-// store.dispatch(AddCartItem(1, 2));
-// store.dispatch(removeItem(12))
-// store.dispatch(decreaseCartItemQuantity(70))
-// store.dispatch(increaseCartItemQuantity(1))
 
- 
-// store.dispatch(addWishListItem(1, 2));
-// store.dispatch(removeWishList(1));
 
+// const newUsers = users.map((user, i)=>{
+//   if(i === 1){
+//     return {...users, age: 29}
+//   }
+//   return user
+// })
+
+const newUsers = produce(users, (userCopied)=>{
+  userCopied[1].age = 16
+})
+
+console.log(newUsers);
+console.log(users);
 
