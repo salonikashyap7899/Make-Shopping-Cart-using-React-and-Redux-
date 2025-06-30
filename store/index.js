@@ -1,63 +1,19 @@
-import { createStore, combineReducers } from 'redux';
 
-import cartReducer, {
-
-} from './cartSlice';
-import wishListReducer, {
-
-} from './wishListSlice';
-import productsReducer from './productSlice';
-
-import {produce} from 'immer'
+import cartReducer from "./cartSlice";
+import wishListReducer from "./wishListSlice";
+import productsReducer from "./productSlice";
+import { configureStore } from "@reduxjs/toolkit";
+import { logger } from "./middleware/logger";
 
 
 
 
-const reducer = combineReducers({
-  products: productsReducer,
-  cartItem: cartReducer,
-  wishList: wishListReducer
+export const store = configureStore({
+  reducer: {
+    products: productsReducer,
+    cartItem: cartReducer,
+    wishList: wishListReducer,
+  },
+  middleware: [logger]
 });
-
-
-
-export const store = createStore(
-  reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__?.()
-)
-// console.log(store.getState());
-
-
-const users = [
-  {
-    name: 'saloni',
-    age: 19
-  },
-  {
-    name: 'ram',
-    age: 20
-  },
-  {
-    name: 'aayu',
-    age: 26
-  },
-]
-
-
-
-
-
-// const newUsers = users.map((user, i)=>{
-//   if(i === 1){
-//     return {...users, age: 29}
-//   }
-//   return user
-// })
-
-const newUsers = produce(users, (userCopied)=>{
-  userCopied[1].age = 16
-})
-
-console.log(newUsers);
-console.log(users);
-
+ 
