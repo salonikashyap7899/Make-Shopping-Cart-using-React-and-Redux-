@@ -1,5 +1,5 @@
 
-import { myCreateSlice } from "../redux-toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const findItemIndex = (state, action) =>
   state.findIndex(
@@ -7,7 +7,7 @@ const findItemIndex = (state, action) =>
   );
 
 
-const mySlice = myCreateSlice({
+const slice  = createSlice({
   name: "cart",
   initialState: [],
   reducers: {
@@ -44,7 +44,7 @@ export const {
   removeItem,
   increaseCartItemQuantity,
   decreaseCartItemQuantity,
-} = mySlice.actions;
+} = slice.actions;
 
 
-export default mySlice.reducer;
+export default slice.reducer;

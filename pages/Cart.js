@@ -1,6 +1,6 @@
 import React from 'react'
 import CartItem from '../components/CartItem'
-import { useSelector } from '../react-redux'
+import { useSelector } from 'react-redux'
 import '../App.css'
 
 export default function Cart() {
