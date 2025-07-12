@@ -16201,11 +16201,12 @@ function Header() {
     (0, _react.useEffect)(()=>{
         dispatch((0, _productSlice.fetchProducts)());
         fetch('https://fakestoreapi.com/products').then((res)=>res.json()).then((data)=>{
-            console.log(data);
             dispatch((0, _productSlice.updateAllProducts)(data));
+        }).catch(()=>{
+            dispatch((0, _productSlice.fetchError)("Failed to fetch products"));
         });
     }, []);
-    const cartItems = (0, _reactRedux.useSelector)((state)=>state.cartItem); // ✅ use correct key
+    const cartItems = (0, _reactRedux.useSelector)((state)=>state.cartItem);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("header", {
         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
             className: "header-contents",
@@ -16216,12 +16217,12 @@ function Header() {
                         children: "Shopee"
                     }, void 0, false, {
                         fileName: "components/Header.js",
-                        lineNumber: 23,
+                        lineNumber: 24,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "components/Header.js",
-                    lineNumber: 22,
+                    lineNumber: 23,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
@@ -16233,7 +16234,7 @@ function Header() {
                             alt: "\uD83D\uDED2"
                         }, void 0, false, {
                             fileName: "components/Header.js",
-                            lineNumber: 26,
+                            lineNumber: 27,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -16241,24 +16242,24 @@ function Header() {
                             children: cartItems?.reduce((accumulator, currentItem)=>accumulator + currentItem.quantity, 0)
                         }, void 0, false, {
                             fileName: "components/Header.js",
-                            lineNumber: 27,
+                            lineNumber: 28,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "components/Header.js",
-                    lineNumber: 25,
+                    lineNumber: 26,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "components/Header.js",
-            lineNumber: 21,
+            lineNumber: 22,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "components/Header.js",
-        lineNumber: 20,
+        lineNumber: 21,
         columnNumber: 5
     }, this);
 }
@@ -25820,24 +25821,31 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "updateAllProducts", ()=>updateAllProducts);
 parcelHelpers.export(exports, "fetchProducts", ()=>fetchProducts);
+parcelHelpers.export(exports, "fetchError", ()=>fetchError);
 var _toolkit = require("@reduxjs/toolkit");
 const slice = (0, _toolkit.createSlice)({
     name: "products",
     initialState: {
         loading: false,
-        list: []
+        list: [],
+        errro: ""
     },
     reducers: {
+        fetchProducts (state) {
+            state.loading = true;
+        },
+        fetchError (state, action) {
+            state.loading = false;
+            state.error = action.payload || "Failed to fetch products";
+        },
         updateAllProducts (state, action) {
             state.loading = false;
             state.list = action.payload;
-        },
-        fetchProducts (state) {
-            state.loading = true;
+            state.error = "";
         }
     }
 });
-const { updateAllProducts, fetchProducts } = slice.actions;
+const { updateAllProducts, fetchProducts, fetchError } = slice.actions;
 exports.default = slice.reducer;
 
 },{"@reduxjs/toolkit":"fKS5f","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"fKS5f":[function(require,module,exports,__globalThis) {
@@ -30927,6 +30935,7 @@ function Home() {
     _s();
     const productsList = (0, _reactRedux.useSelector)((state)=>state.products.list);
     const isLoading = (0, _reactRedux.useSelector)((state)=>state.products.loading);
+    const isError = (0, _reactRedux.useSelector)((state)=>state.products.error);
     (0, _reactRedux.useSelector)(()=>{});
     return isLoading ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
         style: {
@@ -30935,7 +30944,16 @@ function Home() {
         children: "Loading...."
     }, void 0, false, {
         fileName: "pages/Home.js",
-        lineNumber: 13,
+        lineNumber: 14,
+        columnNumber: 7
+    }, this) : isError ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
+        style: {
+            textAlign: 'center'
+        },
+        children: isError
+    }, void 0, false, {
+        fileName: "pages/Home.js",
+        lineNumber: 16,
         columnNumber: 7
     }, this) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         className: "products-container",
@@ -30947,17 +30965,18 @@ function Home() {
                 imageUrl: image
             }, id, false, {
                 fileName: "pages/Home.js",
-                lineNumber: 17,
+                lineNumber: 20,
                 columnNumber: 9
             }, this))
     }, void 0, false, {
         fileName: "pages/Home.js",
-        lineNumber: 15,
+        lineNumber: 18,
         columnNumber: 5
     }, this);
 }
-_s(Home, "6+9Ge1tbIMgwpPLjwLv9JtRVgno=", false, function() {
+_s(Home, "SEVADYQhMTPmBb0uZzCV9ljtbnw=", false, function() {
     return [
+        (0, _reactRedux.useSelector),
         (0, _reactRedux.useSelector),
         (0, _reactRedux.useSelector),
         (0, _reactRedux.useSelector)
@@ -31066,11 +31085,7 @@ function Product({ productId, title, rating, price, imageUrl }) {
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
                         onClick: ()=>{
                             dispatch((0, _cartSlice.AddCartItem)({
-                                productId,
-                                title,
-                                rating,
-                                price,
-                                imageUrl
+                                productId
                             }));
                         },
                         children: "Add to Cart"
@@ -31134,7 +31149,19 @@ var _appCss = require("../App.css");
 var _s = $RefreshSig$();
 function Cart() {
     _s();
-    const cartItems = (0, _reactRedux.useSelector)((state)=>state.cartItem); // ✅ correct
+    var _s1 = $RefreshSig$();
+    const cartItems = (0, _reactRedux.useSelector)(_s1(({ products, cartItems })=>{
+        _s1();
+        return cartItems = (0, _reactRedux.useSelector)(()=>{
+            const cartProduct = products.list.find((product)=>product.id === cartItems.productId);
+            return cartProduct;
+        });
+    }, "nKHvd/QB6hocKEk0fSJoSYcCyR8=", false, function() {
+        return [
+            (0, _reactRedux.useSelector)
+        ];
+    }));
+    console.log(cartItems);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         className: "cart-container",
         children: [
@@ -31142,7 +31169,7 @@ function Cart() {
                 children: "Items in Your Cart"
             }, void 0, false, {
                 fileName: "pages/Cart.js",
-                lineNumber: 11,
+                lineNumber: 18,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -31156,7 +31183,7 @@ function Cart() {
                                 children: "Item"
                             }, void 0, false, {
                                 fileName: "pages/Cart.js",
-                                lineNumber: 14,
+                                lineNumber: 21,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -31164,7 +31191,7 @@ function Cart() {
                                 children: "Price"
                             }, void 0, false, {
                                 fileName: "pages/Cart.js",
-                                lineNumber: 15,
+                                lineNumber: 22,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -31172,7 +31199,7 @@ function Cart() {
                                 children: "Quantity"
                             }, void 0, false, {
                                 fileName: "pages/Cart.js",
-                                lineNumber: 16,
+                                lineNumber: 23,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -31180,43 +31207,43 @@ function Cart() {
                                 children: "Total"
                             }, void 0, false, {
                                 fileName: "pages/Cart.js",
-                                lineNumber: 17,
+                                lineNumber: 24,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "pages/Cart.js",
-                        lineNumber: 13,
+                        lineNumber: 20,
                         columnNumber: 9
                     }, this),
-                    cartItems?.map(({ productId, title, rating, price, imageUrl, quantity })=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _cartItemDefault.default), {
-                            productId: productId,
+                    cartItems?.map(({ id, title, rating, price, image, quantity })=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _cartItemDefault.default), {
+                            productId: id,
                             title: title,
                             price: price,
                             quantity: quantity,
-                            imageUrl: imageUrl,
-                            rating: rating
-                        }, productId, false, {
+                            imageUrl: image,
+                            rating: rating.rate
+                        }, id, false, {
                             fileName: "pages/Cart.js",
-                            lineNumber: 21,
-                            columnNumber: 13
+                            lineNumber: 27,
+                            columnNumber: 11
                         }, this)),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                         className: "cart-header cart-item-container",
                         children: [
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {}, void 0, false, {
                                 fileName: "pages/Cart.js",
-                                lineNumber: 33,
+                                lineNumber: 38,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {}, void 0, false, {
                                 fileName: "pages/Cart.js",
-                                lineNumber: 34,
+                                lineNumber: 39,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {}, void 0, false, {
                                 fileName: "pages/Cart.js",
-                                lineNumber: 35,
+                                lineNumber: 40,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -31227,25 +31254,25 @@ function Cart() {
                                 ]
                             }, void 0, true, {
                                 fileName: "pages/Cart.js",
-                                lineNumber: 36,
+                                lineNumber: 41,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "pages/Cart.js",
-                        lineNumber: 32,
+                        lineNumber: 37,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "pages/Cart.js",
-                lineNumber: 12,
+                lineNumber: 19,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "pages/Cart.js",
-        lineNumber: 10,
+        lineNumber: 17,
         columnNumber: 5
     }, this);
 }
@@ -31263,7 +31290,7 @@ $RefreshReg$(_c, "Cart");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","../components/CartItem":"hlTRH","../App.css":"7g3a6","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react-redux":"hbNxT"}],"hlTRH":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","../components/CartItem":"hlTRH","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react-redux":"hbNxT","../App.css":"7g3a6"}],"hlTRH":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$c5c9 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$c5c9.init();
 var prevRefreshReg = globalThis.$RefreshReg$;

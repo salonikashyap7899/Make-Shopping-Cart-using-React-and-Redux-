@@ -2,20 +2,21 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CartIcon from '../assets/cart-icon.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts, updateAllProducts } from '../store/productSlice';
+import { fetchError, fetchProducts, updateAllProducts } from '../store/productSlice';
 
 export default function Header() {
    const dispatch = useDispatch();
   useEffect(()=>{
     dispatch(fetchProducts())
     fetch('https://fakestoreapi.com/products').then((res) => res.json()).then((data) =>{
-      console.log(data)
      dispatch(updateAllProducts(data))
     })
-
- 
+    .catch(()=>{
+      dispatch(fetchError("Failed to fetch products"));
+    });
+    
   }, [])
-  const cartItems = useSelector((state) => state.cartItem); // ✅ use correct key
+  const cartItems = useSelector((state) => state.cartItem);
   return (
     <header>
       <div className="header-contents">

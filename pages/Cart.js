@@ -1,11 +1,18 @@
-import React from 'react'
-import CartItem from '../components/CartItem'
-import { useSelector } from 'react-redux'
-import '../App.css'
+import React from "react";
+import CartItem from "../components/CartItem";
+import { useSelector } from "react-redux";
+import "../App.css";
 
 export default function Cart() {
-const cartItems = useSelector((state) => state.cartItem); // ✅ correct
-
+  const cartItems = useSelector(({ products, cartItems }) => {
+    return (cartItems = useSelector(() => {
+      const cartProduct = products.list.find(
+        (product) => product.id === cartItems.productId
+      );
+      return cartProduct;
+    }));
+  });
+  console.log(cartItems);
   return (
     <div className="cart-container">
       <h2>Items in Your Cart</h2>
@@ -16,19 +23,17 @@ const cartItems = useSelector((state) => state.cartItem); // ✅ correct
           <div className="quantity">Quantity</div>
           <div className="total">Total</div>
         </div>
-        {cartItems?.map(
-          ({ productId, title, rating, price, imageUrl, quantity }) => (
-            <CartItem
-              key={productId}
-              productId={productId}
-              title={title}
-              price={price}
-              quantity={quantity}
-              imageUrl={imageUrl}
-              rating={rating}
-            />
-          )
-        )}
+        {cartItems?.map(({ id, title, rating, price, image, quantity }) => (
+          <CartItem
+            key={id}
+            productId={id}
+            title={title}
+            price={price}
+            quantity={quantity}
+            imageUrl={image}
+            rating={rating.rate}
+          />
+        ))}
         <div className="cart-header cart-item-container">
           <div></div>
           <div></div>
@@ -44,5 +49,5 @@ const cartItems = useSelector((state) => state.cartItem); // ✅ correct
         </div>
       </div>
     </div>
-  )
+  );
 }

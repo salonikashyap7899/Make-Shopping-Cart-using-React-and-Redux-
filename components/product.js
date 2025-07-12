@@ -20,7 +20,7 @@ export default function Product({ productId, title, rating, price, imageUrl }) {
       <div className="cta-container">
         <button
           onClick={() => {
-            dispatch(AddCartItem({ productId, title, rating, price, imageUrl }))
+            dispatch(AddCartItem({ productId }))
           }}
         >
           Add to Cart
