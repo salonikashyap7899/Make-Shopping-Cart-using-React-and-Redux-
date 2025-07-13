@@ -1,19 +1,22 @@
 import React from "react";
-import CartItem from "../components/CartItem";
+import CartItems from "../components/CartItem";
 import { useSelector } from "react-redux";
 import "../App.css";
 
 export default function Cart() {
-  const cartItems = useSelector(({ products, cartItems }) => {
-    return (cartItems = useSelector(() => {
+  const cartItem = useSelector(({ products, cartItem }) => {
+    return cartItem.list?.map(({ productId, quantity }) => {
       const cartProduct = products.list.find(
-        (product) => product.id === cartItems.productId
+        (product) => product.id === productId
       );
-      return cartProduct;
-    }));
-  });
-  console.log(cartItems);
-  return (
+      return { ...cartProduct, quantity };
+    }).filter(({title}) => title)
+  })
+
+  const  isLoading = useSelector((state) => state.cartItem.loading)
+  const  isError = useSelector((state) => state.cartItem.error)
+
+  return ( isLoading ?    <h2>Loading Cart Items...</h2> : isError ? <h2>{isError}</h2> :
     <div className="cart-container">
       <h2>Items in Your Cart</h2>
       <div className="cart-items-container">
@@ -23,8 +26,8 @@ export default function Cart() {
           <div className="quantity">Quantity</div>
           <div className="total">Total</div>
         </div>
-        {cartItems?.map(({ id, title, rating, price, image, quantity }) => (
-          <CartItem
+        {cartItem?.map(({ id, title, rating, price, image, quantity }) => (
+          <CartItems
             key={id}
             productId={id}
             title={title}
@@ -38,14 +41,16 @@ export default function Cart() {
           <div></div>
           <div></div>
           <div></div>
-          <div className="total">
+          {
+            isLoading || (isError && <div className="total">
             $
-            {cartItems?.reduce(
+            {cartItem?.reduce(
               (accumulator, currentItem) =>
                 accumulator + currentItem.quantity * currentItem.price,
               0
             )}
-          </div>
+          </div>)
+          }
         </div>
       </div>
     </div>
