@@ -1,5 +1,5 @@
 
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 
 const findItemIndex = (state, action) =>
   state.findIndex(
@@ -53,6 +53,20 @@ error: "",
   },
 });
 
+
+ const getCartItems = ({ products, cartItem }) => {
+    return cartItem.list?.map(({ productId, quantity }) => {
+      const cartProduct = products.list.find(
+        (product) => product.id === productId
+      );
+      return { ...cartProduct, quantity };
+    }).filter(({title}) => title)
+  }
+
+export const getAllCartItems =  createSelector(getCartItems, (state ) => state)
+
+export const getCartLoadingStatus = (state) => state.cartItem.loading;
+export const getCartErrorStatus = (state) => state.cartItem.error;
 
 
 export const {
