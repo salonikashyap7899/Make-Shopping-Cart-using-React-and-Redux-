@@ -12,6 +12,7 @@ export const store = configureStore({
     products: productsReducer,
     cartItem: cartReducer,
     wishList: wishListReducer,
-  }
+  },
+
 });
  

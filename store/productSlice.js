@@ -26,9 +26,25 @@ const slice = createSlice({
   },
 });
 
+
 export const getAllProducts = (state) => state.products.list;
 export const getLoadingStatus = (state) => state.products.loading;
 export const getErrorStatus = (state) => state.products.error;
+
+export const fetchProductData = () => (dispatch) =>{
+    dispatch(fetchProducts());
+     fetch(`https://fakestoreapi.com/products`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          dispatch(updateAllProducts(data))
+        })
+        .catch(() => {
+          dispatch(fetchError())
+        });
+    
+  }
+
 
 export const { updateAllProducts, fetchProducts, fetchError } = slice.actions;
 export default slice.reducer;
