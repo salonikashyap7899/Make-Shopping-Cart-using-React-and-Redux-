@@ -4,4 +4,4 @@ export const func = ({dispatch, getState}) => (next) => (action) => {
     } else {
         next(action);
     }
-}
+} 
