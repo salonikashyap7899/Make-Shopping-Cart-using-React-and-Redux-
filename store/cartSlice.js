@@ -26,6 +26,27 @@ const slice = createSlice({
     list: [],
     error: "",
   },
+    reducers: {
+    AddCartItem(state, action) {
+      const existingItemIndex = findItemIndex(state.list, action)
+      if (existingItemIndex !== -1) state.list[existingItemIndex].quantity += 1
+      else state.list.push({ ...action.payload, quantity: 1 })
+    },
+    removeItem(state, action) {
+      const existingItemIndex = findItemIndex(state.list, action)
+      state.list.splice(existingItemIndex, 1)
+    },
+    increaseCartItemQuantity(state, action) {
+      const existingItemIndex = findItemIndex(state.list, action)
+      state.list[existingItemIndex].quantity += 1
+    },
+    decreaseCartItemQuantity(state, action) {
+      const existingItemIndex = findItemIndex(state.list, action)
+      state.list[existingItemIndex].quantity -= 1
+      if (state.list[existingItemIndex].quantity === 0)
+        state.list.splice(existingItemIndex, 1)
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCartItemsData.pending, (state) => {
       state.loading = true;

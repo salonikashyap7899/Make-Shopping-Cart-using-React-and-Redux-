@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import cartIcon from "../assets/cart-icon.svg";
+import cartIcon from '../assets/cart-icon.svg'
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductData } from "../store/productSlice";
 import { fetchCartItemsData } from "../store/cartSlice";
@@ -19,8 +19,7 @@ export default function Header() {
           <Link to="/">Shopee</Link>
         </h1>
         <Link className="cart-icon" to="/cart">
-          <img src={cartIcon} alt="🛒" />
-          <div className="cart-items-count">
+          <div className="cart-items-count">  
             {cartItems?.reduce(
               (accumulator, currentItem) => accumulator + currentItem.quantity,
               0

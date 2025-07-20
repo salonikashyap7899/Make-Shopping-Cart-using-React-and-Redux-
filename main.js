@@ -6,6 +6,8 @@ import { store } from "./store";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 
+
+
 // Wrap App in Provider INSIDE the router:
 const router = createBrowserRouter([
   {
